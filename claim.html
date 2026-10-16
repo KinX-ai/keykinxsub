@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KinXSub - Nhận Bản Quyền Dùng Thử Miễn Phí (1 Tháng)</title>
+    <meta name="description" content="Cổng nhận mã kích hoạt bản quyền 30 ngày miễn phí cho phần mềm KinXSub. Mỗi máy tính được nhận 1 lần duy nhất.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%20viewBox=%220%200%20100%20100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Ambient Background Light -->
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+
+    <div class="app-container">
+        <!-- App Header -->
+        <header class="app-header">
+            <div class="brand-wrapper">
+                <div class="brand-logo">⚡</div>
+                <div class="brand-info">
+                    <h1>KinXSub AI Studio</h1>
+                    <p>
+                        <span>Cổng Kích Hoạt Tự Động</span>
+                        <span class="brand-badge" style="background: rgba(16, 185, 129, 0.2); border-color: rgba(16, 185, 129, 0.4); color: #34D399;">Free 30 Days</span>
+                    </p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <div class="status-indicator">
+                    <span class="status-dot"></span>
+                    <span>Hệ Thống Trực Tuyến</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <div class="hero-claim">
+            <div class="hero-pill-badge">
+                <span>🎁</span> CHƯƠNG TRÌNH TRẢI NGHIỆM MIỄN PHÍ
+            </div>
+            <h2 class="hero-title">Nhận Key Bản Quyền KinXSub (1 Tháng)</h2>
+            <p class="hero-desc">
+                Trải nghiệm trọn bộ công nghệ AI tạo video ngắn tự động, tự gắn phụ đề đa phong cách và lồng tiếng thông minh. Mỗi máy tính được nhận dùng thử 1 lần duy nhất.
+            </p>
+        </div>
+
+        <!-- 3 Steps Guide -->
+        <div class="claim-steps-grid">
+            <div class="step-card">
+                <div class="step-badge-num">1</div>
+                <div class="step-title">Mở App KinXSub</div>
+                <div class="step-desc">Khởi động phần mềm KinXSub trên máy tính của bạn và vào mục <b>"Đăng ký bản quyền"</b>.</div>
+            </div>
+            <div class="step-card">
+                <div class="step-badge-num">2</div>
+                <div class="step-title">Sao Chép Mã Máy</div>
+                <div class="step-desc">Bấm nút <b>"Sao chép mã máy"</b> hiển thị trên phần mềm (dạng <code>KX-XXXX-XXXX-XXXX-XXXX</code>).</div>
+            </div>
+            <div class="step-card">
+                <div class="step-badge-num">3</div>
+                <div class="step-title">Dán & Nhận Key</div>
+                <div class="step-desc">Dán mã máy vào ô dưới đây rồi bấm <b>"Nhận Key Kích Hoạt"</b> để bắt đầu sử dụng.</div>
+            </div>
+        </div>
+
+        <!-- Main Card Form -->
+        <main class="content-card">
+            <!-- Dynamic Notice (Warning if already claimed, Success if newly claimed) -->
+            <div id="claimNoticeContainer" style="display: none;"></div>
+
+            <!-- Form -->
+            <div class="form-section-title">
+                <span>🔑</span> Nhập Mã Máy Tính Của Bạn
+            </div>
+
+            <div class="form-group">
+                <label for="claimHwidInput" class="form-label">
+                    <span>Mã máy phần cứng (Hardware ID) <span class="req">*</span></span>
+                    <span style="font-size: 11px; color: var(--accent-cyan);">Định dạng chuẩn KX-XXXX-XXXX-XXXX-XXXX</span>
+                </label>
+                <div class="input-with-button">
+                    <input 
+                        type="text" 
+                        id="claimHwidInput" 
+                        class="form-input font-mono" 
+                        placeholder="KX-A1B2-C3D4-E5F6-7890" 
+                        maxlength="22" 
+                        autocomplete="off"
+                        spellcheck="false"
+                    >
+                    <button type="button" id="btnClaimPaste" class="input-btn-paste">
+                        📋 Dán từ Clipboard
+                    </button>
+                </div>
+                <div class="input-hint">
+                    <span>💡</span> Mẹo: Chỉ cần bấm nút <b>"Sao chép mã máy"</b> trên app KinXSub, sau đó bấm <b>"Dán từ Clipboard"</b> vào đây.
+                </div>
+            </div>
+
+            <!-- Fixed 1-Month Package Box -->
+            <div class="trial-package-card">
+                <div class="package-info">
+                    <div class="package-name">
+                        <span>⚡ Gói Trải Nghiệm Pro (VIP Trial)</span>
+                        <span class="package-pill">Mặc Định 1 Tháng</span>
+                    </div>
+                    <div class="package-meta">
+                        <div class="package-meta-item">
+                            <span>⏱️ Thời hạn:</span>
+                            <strong>30 Ngày (1 Tháng)</strong>
+                        </div>
+                        <div class="package-meta-item">
+                            <span>🔒 Giới hạn:</span>
+                            <strong>1 lần / mỗi máy tính</strong>
+                        </div>
+                        <div class="package-meta-item">
+                            <span>🛡️ Chứng chỉ:</span>
+                            <strong>RSA-2048 Bit</strong>
+                        </div>
+                    </div>
+                </div>
+                <div class="package-price-tag">
+                    <div class="price-free">0 VNĐ</div>
+                    <div class="price-sub">Miễn phí 100%</div>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="button" id="btnSubmitClaim" class="btn-generate">
+                <span>⚡ NHẬN KEY BẢN QUYỀN 1 THÁNG NGAY</span>
+            </button>
+
+            <!-- Key Result Card (Auto appears when claimed or already claimed) -->
+            <div id="claimResultCard" class="result-card" style="display: none; margin-top: 28px;">
+                <div class="result-header">
+                    <div class="result-badge">
+                        <span>🎉</span> MÃ BẢN QUYỀN CỦA BẠN
+                    </div>
+                    <div style="font-size: 13px; color: var(--text-secondary);">
+                        Áp dụng cho máy: <strong id="claimHwidTag" class="font-mono" style="color: var(--accent-cyan);">-</strong>
+                    </div>
+                </div>
+
+                <div class="key-container">
+                    <div id="claimKeyOutput" class="key-output">-</div>
+                </div>
+
+                <div class="key-meta-bar">
+                    <div class="meta-item">
+                        <span>📅 Hạn sử dụng:</span>
+                        <strong id="claimExpDate">-</strong>
+                        <span id="claimDaysLeft" style="font-size: 11px;"></span>
+                    </div>
+                    <div class="meta-item">
+                        <span>🏷️ Gói:</span>
+                        <strong style="color: #34D399;">Dùng Thử 1 Tháng (30 Ngày)</strong>
+                    </div>
+                </div>
+
+                <div class="result-actions" style="margin-top: 16px;">
+                    <button type="button" id="btnCopyClaimKey" class="btn-action btn-copy-key">
+                        <span>📋</span> Sao Chép Mã Key
+                    </button>
+                    <button type="button" id="btnDownloadClaimTxt" class="btn-action btn-copy-msg">
+                        <span>⬇️</span> Tải File Key (.TXT)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Activation Instruction Box -->
+            <div class="activation-instruction-box">
+                <div class="instruction-title">
+                    <span>📖</span> Hướng Dẫn Kích Hoạt Bản Quyền Vào App KinXSub:
+                </div>
+                <ol class="instruction-list">
+                    <li class="instruction-item">
+                        <span class="instruction-step-num">1</span>
+                        <div>Bấm nút <b>"📋 Sao Chép Mã Key"</b> ở trên.</div>
+                    </li>
+                    <li class="instruction-item">
+                        <span class="instruction-step-num">2</span>
+                        <div>Mở phần mềm <b>KinXSub</b> trên máy tính của bạn, chọn menu <b>"Đăng ký bản quyền"</b> ở thanh điều hướng bên trái.</div>
+                    </li>
+                    <li class="instruction-item">
+                        <span class="instruction-step-num">3</span>
+                        <div>Dán mã vừa sao chép vào ô <b>"Mã kích hoạt"</b> rồi bấm nút <b>"Kích hoạt ngay"</b>. Hệ thống sẽ mở khóa toàn bộ tính năng VIP trong 30 ngày!</div>
+                    </li>
+                </ol>
+            </div>
+
+            <!-- Contact Box -->
+            <div class="contact-support-box">
+                <h4>💎 Bạn Muốn Nâng Cấp Bản Quyền 6 Tháng, 1 Năm Hoặc Vĩnh Viễn?</h4>
+                <p>Sau khi dùng thử hoặc muốn sở hữu vĩnh viễn không giới hạn, vui lòng liên hệ bộ phận hỗ trợ để được tư vấn nâng cấp bản quyền chính thức.</p>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>KinXSub License System &copy; 2026. Chứng thực khóa điện tử bất đối xứng RSA-2048 Bit.</p>
+        </footer>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Scripts -->
+    <script src="js/keys.js"></script>
+    <script src="js/crypto.js"></script>
+    <script src="js/claim.js"></script>
+</body>
+</html>

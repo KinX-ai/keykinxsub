@@ -1,0 +1,12 @@
+{
+  "name": "kinxsub-keygen-web",
+  "version": "1.0.0",
+  "description": "KinXSub License Key Generator - Vercel Ready",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve ."
+  },
+  "keywords": ["license-generator", "rsa-2048", "kinxsub", "vercel"],
+  "author": "KinXSub",
+  "license": "MIT"
+}

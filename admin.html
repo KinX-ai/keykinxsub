@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KinXSub - Quản Trị Viên Tạo Key Bản Quyền</title>
+    <meta name="description" content="Hệ thống tạo mã kích hoạt bản quyền RSA-2048 offline bảo mật cao cho phần mềm KinXSub dành cho Quản trị viên.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%20viewBox=%220%200%20100%20100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Ambient Background Light -->
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+
+    <div class="app-container">
+        <!-- App Header -->
+        <header class="app-header">
+            <div class="brand-wrapper">
+                <div class="brand-logo">⚡</div>
+                <div class="brand-info">
+                    <h1>KinXSub Admin Center</h1>
+                    <p>
+                        <span>Hệ Thống Quản Lý Bản Quyền VIP</span>
+                        <span class="brand-badge">RSA-2048 Bit</span>
+                    </p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <a href="index.html" class="btn-lock" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px; background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.35); color: #34D399;">
+                    <span>🌐</span> Trang Khách Dùng Thử
+                </a>
+                <button id="btnLockApp" class="btn-lock" title="Khóa bảo mật phiên làm việc">
+                    🔒 Khóa
+                </button>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="nav-tabs" role="tablist">
+            <button class="tab-btn active" data-tab="tabGenerate" role="tab" id="tabBtnGenerate">
+                <span>⚡</span> Tạo Key Mới
+            </button>
+            <button class="tab-btn" data-tab="tabVerify" role="tab" id="tabBtnVerify">
+                <span>🔍</span> Kiểm Tra Key
+            </button>
+            <button class="tab-btn" data-tab="tabHistory" role="tab" id="tabBtnHistory">
+                <span>📜</span> Lịch Sử Cấp Key
+            </button>
+            <button class="tab-btn" data-tab="tabTrials" role="tab" id="tabBtnTrials">
+                <span>🛡️</span> Quản Lý Dùng Thử
+            </button>
+            <button class="tab-btn" data-tab="tabSettings" role="tab" id="tabBtnSettings">
+                <span>⚙️</span> Cài Đặt
+            </button>
+        </nav>
+
+        <!-- Main Content Card -->
+        <main class="content-card">
+            <!-- TAB 1: GENERATE KEY -->
+            <section id="tabGenerate" class="tab-pane active" role="tabpanel">
+                <h2 class="form-section-title">
+                    <span>⚡</span> Tạo Mã Kích Hoạt (Tùy Chọn Ngày / Tháng / Năm / Vĩnh Viễn)
+                </h2>
+
+                <!-- HWID Input -->
+                <div class="form-group">
+                    <label for="hwidInput" class="form-label">
+                        <span>Mã máy (Hardware ID) <span class="req">*</span></span>
+                        <span style="font-size: 11px; color: var(--accent-cyan);">Định dạng: KX-XXXX-XXXX-XXXX-XXXX</span>
+                    </label>
+                    <div class="input-with-button">
+                        <input 
+                            type="text" 
+                            id="hwidInput" 
+                            class="form-input mono" 
+                            placeholder="KX-A1B2-C3D4-E5F6-7890" 
+                            maxlength="22" 
+                            autocomplete="off"
+                            spellcheck="false"
+                        >
+                        <button type="button" id="btnPasteHwid" class="input-btn-paste">
+                            📋 Dán từ Clipboard
+                        </button>
+                    </div>
+                    <div class="input-hint">
+                        <span>💡</span> Hướng dẫn: Khách hàng mở app KinXSub và bấm nút "Sao chép mã máy".
+                    </div>
+                </div>
+
+                <!-- Customer Name / Note -->
+                <div class="form-group">
+                    <label for="customerInput" class="form-label">
+                        <span>Tên khách hàng / Ghi chú (Tùy chọn)</span>
+                        <span style="font-size: 11px; color: var(--text-muted);">Lưu trữ nội bộ</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="customerInput" 
+                        class="form-input" 
+                        placeholder="VD: Anh Minh - Gói VIP 1 Năm"
+                        autocomplete="off"
+                    >
+                </div>
+
+                <!-- Comprehensive Duration Selector (Ngày, Tháng, Năm, Vĩnh viễn) -->
+                <div class="form-group">
+                    <label class="form-label">
+                        <span>Thời hạn bản quyền <span class="req">*</span></span>
+                        <span style="font-size: 11px; color: #FCD34D;">Chọn theo Ngày, Tháng, Năm hoặc Vĩnh Viễn</span>
+                    </label>
+
+                    <div class="duration-tabs-wrapper">
+                        <!-- Category Bar -->
+                        <div class="duration-category-bar">
+                            <button type="button" class="category-pill active" data-cat="days">⏱️ Theo Ngày</button>
+                            <button type="button" class="category-pill" data-cat="months">📅 Theo Tháng</button>
+                            <button type="button" class="category-pill" data-cat="years">🌟 Theo Năm</button>
+                            <button type="button" class="category-pill" data-cat="lifetime">👑 Vĩnh Viễn</button>
+                            <button type="button" class="category-pill" data-cat="custom">🗓️ Lịch Tùy Chọn</button>
+                        </div>
+
+                        <!-- Pane: Theo Ngày -->
+                        <div id="paneDurationDays" class="category-content-pane active">
+                            <div class="duration-grid">
+                                <button type="button" class="duration-btn" data-days="3">
+                                    <span>3 Ngày</span>
+                                    <span class="badge">Dùng thử nhanh</span>
+                                </button>
+                                <button type="button" class="duration-btn" data-days="7">
+                                    <span>7 Ngày</span>
+                                    <span class="badge">1 tuần</span>
+                                </button>
+                                <button type="button" class="duration-btn" data-days="14">
+                                    <span>14 Ngày</span>
+                                    <span class="badge">2 tuần</span>
+                                </button>
+                                <button type="button" class="duration-btn active" data-days="30">
+                                    <span>30 Ngày</span>
+                                    <span class="badge">1 tháng</span>
+                                </button>
+                                <button type="button" class="duration-btn" data-days="60">
+                                    <span>60 Ngày</span>
+                                    <span class="badge">2 tháng</span>
+                                </button>
+                            </div>
+                            <div class="custom-days-input-row">
+                                <span class="custom-days-label">Hoặc nhập số ngày cụ thể:</span>
+                                <input type="number" id="inputCustomDaysCount" class="custom-days-input" placeholder="VD: 45" min="1" max="36500">
+                                <span class="custom-days-label">ngày</span>
+                                <button type="button" id="btnApplyCustomDays" class="btn-action-unlock" style="padding: 9px 16px; font-size: 13px;">Áp dụng</button>
+                            </div>
+                        </div>
+
+                        <!-- Pane: Theo Tháng -->
+                        <div id="paneDurationMonths" class="category-content-pane">
+                            <div class="duration-grid">
+                                <button type="button" class="duration-btn" data-days="30">
+                                    <span>1 Tháng</span>
+                                    <span class="badge">30 ngày</span>
+                                </button>
+                                <button type="button" class="duration-btn" data-days="60">
+                                    <span>2 Tháng</span>
+                                    <span class="badge">60 ngày</span>
+                                </button>
+                                <button type="button" class="duration-btn" data-days="90">
+                                    <span>3 Tháng</span>
+                                    <span class="badge">1 quý</span>
+                                </button>
+                                <button type="button" class="duration-btn" data-days="180">
+                                    <span>6 Tháng</span>
+                                    <span class="badge">Nửa năm</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Pane: Theo Năm -->
+                        <div id="paneDurationYears" class="category-content-pane">
+                            <div class="duration-grid">
+                                <button type="button" class="duration-btn" data-days="365">
+                                    <span>1 Năm</span>
+                                    <span class="badge">365 ngày</span>
+                                </button>
+                                <button type="button" class="duration-btn" data-days="730">
+                                    <span>2 Năm</span>
+                                    <span class="badge">730 ngày</span>
+                                </button>
+                                <button type="button" class="duration-btn" data-days="1095">
+                                    <span>3 Năm</span>
+                                    <span class="badge">1095 ngày</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Pane: Vĩnh Viễn -->
+                        <div id="paneDurationLifetime" class="category-content-pane">
+                            <div style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: var(--radius-sm); padding: 18px; text-align: center;">
+                                <div style="font-size: 24px; margin-bottom: 6px;">👑</div>
+                                <h3 style="color: #FCD34D; font-size: 16px; font-weight: 700; margin-bottom: 6px;">Bản Quyền Trọn Đời (Lifetime License)</h3>
+                                <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 14px;">Key có hiệu lực vĩnh viễn không giới hạn thời gian (thiết lập đến năm 2099).</p>
+                                <button type="button" class="duration-btn active" data-days="36500" style="margin: 0 auto; display: inline-flex; width: auto; padding: 12px 28px;">
+                                    <span>👑 CHỌN GÓI VĨNH VIỄN</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Pane: Custom Date Picker -->
+                        <div id="paneDurationCustom" class="category-content-pane">
+                            <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 16px;">
+                                <label class="form-label" for="customDateInput">Chọn ngày hết hạn cụ thể trên lịch:</label>
+                                <input type="date" id="customDateInput" class="form-input" style="max-width: 250px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Plan Selection -->
+                <div class="form-group">
+                    <label class="form-label">
+                        <span>Loại gói bản quyền</span>
+                    </label>
+                    <div class="plan-grid">
+                        <button type="button" class="plan-btn active" data-plan="VIP">
+                            <span>⭐ VIP PRO</span>
+                            <span style="font-size: 11px; color: var(--text-muted);">Đầy đủ tính năng</span>
+                        </button>
+                        <button type="button" class="plan-btn" data-plan="ENTERPRISE">
+                            <span>🏢 Doanh Nghiệp</span>
+                            <span style="font-size: 11px; color: var(--text-muted);">Ưu tiên cao nhất</span>
+                        </button>
+                        <button type="button" class="plan-btn" data-plan="AGENCY">
+                            <span>🚀 Agency</span>
+                            <span style="font-size: 11px; color: var(--text-muted);">Quy mô lớn</span>
+                        </button>
+                        <button type="button" class="plan-btn" data-plan="TRIAL">
+                            <span>🎁 Dùng Thử</span>
+                            <span style="font-size: 11px; color: var(--text-muted);">Trải nghiệm</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Action Button -->
+                <button type="button" id="btnGenerate" class="btn-generate">
+                    <span>⚡</span> TẠO KEY BẢN QUYỀN (RSA-2048)
+                </button>
+
+                <!-- Result Card -->
+                <div id="resultCard" class="result-card hidden">
+                    <div class="result-header">
+                        <div class="result-badge">
+                            <span>✓</span> TẠO KEY THÀNH CÔNG
+                        </div>
+                        <div class="result-time" id="resultTimestamp">-</div>
+                    </div>
+
+                    <div class="key-container">
+                        <div id="keyOutput" class="key-output">-</div>
+                    </div>
+
+                    <div class="result-actions">
+                        <button type="button" id="btnCopyKey" class="btn-action btn-copy-key">
+                            <span>📋</span> Sao Chép Key
+                        </button>
+                        <button type="button" id="btnCopyMessage" class="btn-action btn-copy-msg">
+                            <span>💬</span> Sao Chép Tin Nhắn Gửi Khách
+                        </button>
+                    </div>
+
+                    <div class="result-meta">
+                        <div class="meta-item">
+                            <div class="meta-label">Mã máy (HWID)</div>
+                            <div id="metaHwid" class="meta-val">-</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Gói cước</div>
+                            <div id="metaPlan" class="meta-val">-</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Hạn sử dụng</div>
+                            <div id="metaExpires" class="meta-val">-</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Thời hạn</div>
+                            <div id="metaDays" class="meta-val">-</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 2: VERIFY KEY -->
+            <section id="tabVerify" class="tab-pane" role="tabpanel">
+                <h2 class="form-section-title">
+                    <span>🔍</span> Kiểm Tra & Giải Mã Key Bản Quyền
+                </h2>
+                <div class="form-group">
+                    <label for="verifyKeyInput" class="form-label">
+                        <span>Dán mã kích hoạt (KXACT-...) cần kiểm tra</span>
+                    </label>
+                    <textarea 
+                        id="verifyKeyInput" 
+                        class="form-input mono" 
+                        rows="4" 
+                        placeholder="Dán chuỗi KXACT-... vào đây để kiểm tra tính hợp lệ và thời hạn"
+                    ></textarea>
+                </div>
+                <button type="button" id="btnVerify" class="btn-generate" style="background: linear-gradient(135deg, #2563EB, #06B6D4);">
+                    <span>🔎</span> XÁC THỰC CHỮ KÝ SỐ RSA
+                </button>
+                <div id="verifyResult" style="margin-top: 20px; display: none;"></div>
+            </section>
+
+            <!-- TAB 3: HISTORY -->
+            <section id="tabHistory" class="tab-pane" role="tabpanel">
+                <h2 class="form-section-title">
+                    <span>📜</span> Lịch Sử Cấp Key Bản Quyền
+                </h2>
+                <div class="history-controls">
+                    <input 
+                        type="text" 
+                        id="historySearch" 
+                        class="form-input search-input" 
+                        placeholder="🔍 Tìm kiếm theo tên khách, mã máy hoặc loại gói..."
+                    >
+                    <button type="button" id="btnExportHistory" class="btn-export">
+                        <span>📥</span> Xuất File TXT
+                    </button>
+                    <button type="button" id="btnClearHistory" class="btn-export" style="color: #FB7185; border-color: rgba(244, 63, 94, 0.3);">
+                        <span>🗑️</span> Xóa Toàn Bộ
+                    </button>
+                </div>
+
+                <div class="history-table-wrapper">
+                    <table class="history-table">
+                        <thead>
+                            <tr>
+                                <th>Khách hàng</th>
+                                <th>Mã máy (HWID)</th>
+                                <th>Gói</th>
+                                <th>Hạn dùng</th>
+                                <th>Trạng thái</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTableBody">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+                <div id="historyEmpty" style="text-align: center; padding: 40px; color: var(--text-muted); display: none;">
+                    Chưa có mã bản quyền nào được tạo.
+                </div>
+            </section>
+
+            <!-- TAB 4: TRIAL CLAIMS MANAGEMENT (NEW) -->
+            <section id="tabTrials" class="tab-pane" role="tabpanel">
+                <h2 class="form-section-title">
+                    <span>🛡️</span> Quản Lý Máy Nhận Dùng Thử 1 Tháng
+                </h2>
+                <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 20px;">
+                    Theo dõi danh sách các máy tính đã tự vào trang public nhận key dùng thử 1 tháng. Bạn có thể mở khóa (reset) để cho phép máy đó nhận lại nếu muốn.
+                </p>
+
+                <div class="history-controls">
+                    <input 
+                        type="text" 
+                        id="trialSearch" 
+                        class="form-input search-input" 
+                        placeholder="🔍 Tìm kiếm mã máy đã nhận dùng thử..."
+                    >
+                    <button type="button" id="btnExportTrials" class="btn-export">
+                        <span>📥</span> Xuất Danh Sách (.TXT)
+                    </button>
+                    <button type="button" id="btnClearTrials" class="btn-export" style="color: #FB7185; border-color: rgba(244, 63, 94, 0.3);">
+                        <span>🗑️</span> Xóa Toàn Bộ Dùng Thử
+                    </button>
+                </div>
+
+                <div class="history-table-wrapper">
+                    <table class="history-table">
+                        <thead>
+                            <tr>
+                                <th>Mã Máy (HWID)</th>
+                                <th>Ngày Nhận</th>
+                                <th>Hạn Dùng</th>
+                                <th>Còn Lại</th>
+                                <th>Thao Tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="trialTableBody">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+                <div id="trialEmpty" style="text-align: center; padding: 40px; color: var(--text-muted); display: none;">
+                    Chưa có máy tính nào đăng ký nhận key dùng thử.
+                </div>
+            </section>
+
+            <!-- TAB 5: SETTINGS -->
+            <section id="tabSettings" class="tab-pane" role="tabpanel">
+                <h2 class="form-section-title">
+                    <span>⚙️</span> Cài Đặt Bảo Mật & Quản Trị
+                </h2>
+
+                <div class="form-group" style="max-width: 400px;">
+                    <h3 style="font-size: 15px; margin-bottom: 12px; color: var(--text-primary);">Đổi Mã PIN Quản Trị Viên</h3>
+                    <div style="margin-bottom: 12px;">
+                        <label class="form-label" for="oldPinInput">Mã PIN hiện tại</label>
+                        <input type="password" id="oldPinInput" class="form-input" placeholder="Mã PIN cũ (mặc định: 888888)">
+                    </div>
+                    <div style="margin-bottom: 14px;">
+                        <label class="form-label" for="newPinInput">Mã PIN mới (ít nhất 4 ký tự)</label>
+                        <input type="password" id="newPinInput" class="form-input" placeholder="Nhập mã PIN mới">
+                    </div>
+                    <button type="button" id="btnChangePin" class="btn-export" style="background: var(--primary); color: #fff; width: 100%; justify-content: center;">
+                        Cập Nhật Mã PIN
+                    </button>
+                </div>
+
+                <div style="margin-top: 30px; padding: 20px; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: var(--radius-sm); font-size: 13px; color: var(--text-secondary); line-height: 1.7;">
+                    <strong style="color: var(--text-primary);">Thông Tin Kỹ Thuật Bảo Mật:</strong><br>
+                    • <strong>Thuật toán mã hóa:</strong> RSA-2048 Bit Asymmetric Cryptography + SHA-256 Digest.<br>
+                    • <strong>Khóa công khai (Public Key):</strong> Nhúng an toàn trong client để xác thực Offline.<br>
+                    • <strong>Khóa bí mật (Private Key):</strong> Được bảo vệ trong hệ thống máy chủ để ký số.<br>
+                    • <strong>Tương thích hoàn toàn:</strong> 100% khớp với cơ chế xác thực của ứng dụng KinXSub.
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- PIN Lock Modal -->
+    <div id="lockModal" class="lock-modal hidden">
+        <div class="lock-card">
+            <div class="lock-icon">🔒</div>
+            <h2 class="lock-title">KinXSub Security Vault</h2>
+            <p class="lock-desc">Vui lòng nhập mã PIN quản trị viên để truy cập công cụ tạo key.</p>
+
+            <input 
+                type="password" 
+                id="pinInput" 
+                class="form-input pin-input" 
+                maxlength="10" 
+                placeholder="••••••"
+                autofocus
+            >
+            <div id="lockError" style="color: var(--accent-rose); font-size: 13px; margin-top: 10px; display: none;">
+                Mã PIN không chính xác! Vui lòng thử lại.
+            </div>
+
+            <button type="button" id="btnUnlock" class="btn-unlock">
+                Mở Khóa Hệ Thống
+            </button>
+            <p style="font-size: 12px; color: var(--text-muted); margin-top: 16px;">
+                Mã PIN mặc định ban đầu: <code>888888</code>
+            </p>
+        </div>
+    </div>
+
+    <!-- Floating Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/keys.js"></script>
+    <script src="js/crypto.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
